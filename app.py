@@ -1,5 +1,5 @@
 import pymysql
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
 
@@ -11,12 +11,40 @@ def index():
     return render_template('index.html')
 
 
+def excute_sql(sql, args=tuple()):
+    with conn.cursor() as cur:
+        if len(args) > 0:
+            cur.execute(sql, args)
+        else:
+            cur.execute(sql)
+        flag = cur.rowcount
+        conn.commit()
+    return flag
+
+
+def query_sql(sql, args=tuple()):
+    with conn.cursor() as cur:
+        if len(args) > 0:
+            cur.execute(sql, args)
+        else:
+            cur.execute(sql)
+        content = cur.fetchall()
+        return content
+
+
 @app.route('/login', methods=['POST'])
 def login():
     user_name = request.values.get('user_name')
     user_pwd = request.values.get('user_pwd')
-    user_role = request.values.get('role')
-    return f'{user_role} {user_name} 登录成功！'
+    user_role = 0 if request.values.get('role') == 'admin' else 1
+    print(user_role)
+    sql = 'select * from user where user_name=%s and user_pwd=%s and role=%s'
+    flag = len(query_sql(sql, (user_name, user_pwd, user_role))) > 0
+    print(flag)
+    if flag:
+        return redirect(url_for('main' if user_role else 'admin'))
+    else:
+        return render_template('warning.html', title='登录', message='请检查用户名或密码是否正确！')
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -27,8 +55,17 @@ def register():
         case 'POST':
             user_name = request.values.get('user_name')
             user_pwd = request.values.get('user_pwd')
-            user_role = 'user'
-            return f'{user_name} 注册成功！'
+            user_role = 1
+            sql = 'select * from user where user_name=%s'
+            flag = len(query_sql(sql, (user_name,))) > 0
+            if flag:
+                return render_template('warning.html', title='注册', message='用户名已存在')
+            sql = 'insert into user(user_name, user_pwd, role) values (%s,%s,%s)'
+            flag = excute_sql(sql, (user_name, user_pwd, user_role))
+            if flag:
+                return render_template('success.html', title=f'{user_name}, 注册')
+            else:
+                return render_template('warning.html', title='注册', message='请联系管理员！')
 
 
 @app.route('/main', methods=['GET', 'POST'])
@@ -51,27 +88,6 @@ def admin():
             cur.execute(sql)
             content = cur.fetchall()
             return render_template('admin.html', content=content)
-
-
-def excute_sql(sql, args=tuple()):
-    with conn.cursor() as cur:
-        if len(args) > 0:
-            cur.execute(sql, args)
-        else:
-            cur.execute(sql)
-        flag = cur.rowcount
-        conn.commit()
-    return flag
-
-
-def query_sql(sql, args=tuple()):
-    with conn.cursor() as cur:
-        if len(args) > 0:
-            cur.execute(sql, args)
-        else:
-            cur.execute(sql)
-        content = cur.fetchall()
-        return content
 
 
 @app.route('/control', methods=['GET', 'POST'])
@@ -120,10 +136,9 @@ def update_book():
     match request.method:
         case 'GET':
             book_id = request.values.get('book_id')
-            content = \
-                query_sql(
-                    'select book._id,name,author,press,cls_name,active from book,book_cls where cls=book_cls._id and '
-                    'book._id=%s', (book_id,))[0]
+            content = query_sql(
+                'select book._id,name,author,press,cls_name,active from book,book_cls where cls=book_cls._id and '
+                'book._id=%s', (book_id,))[0]
             cls = query_sql('select cls_name from book_cls where cls_name!=%s', (content[4],))
             return render_template('update_book.html', content=content, cls=cls[1:])
         case 'POST':

@@ -21,17 +21,12 @@
         <input type="password" class="form-control" id="user_pwd" placeholder="请输入密码" name="user_pwd">
     </div>
     <div class="mb-3">
-        <input type="radio" name="role" id="user" value="user">
+        <input type="radio" name="role" id="user" value="user" checked>
         <label for="user" class="form-label">用户</label>
 
         <input type="radio" name="role" id="admin" value="admin">
         <label for="admin">管理员</label>
 
-    </div>
-    <div class="form-check mb-3">
-        <label class="form-check-label">
-            <input class="form-check-input" type="checkbox" name="remember"> 记住密码
-        </label>
     </div>
     <button type="submit" class="btn btn-primary">登录</button>
     <button class="btn btn-success" type="button" onclick="window.location.href='./register'">注册</button>
