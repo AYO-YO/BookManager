@@ -73,7 +73,8 @@ def main():
     match request.method:
         case 'GET':
             cur = conn.cursor()
-            sql = 'select book._id,name,author,press,cls_name from book,book_cls where cls=book_cls._id and active=1 order by _id'
+            sql = 'select book._id,name,author,press,cls_name from book,book_cls where cls=book_cls._id and active=1 ' \
+                  'order by _id '
             cur.execute(sql)
             content = cur.fetchall()
             return render_template('main.html', content=content)
@@ -84,7 +85,8 @@ def admin():
     match request.method:
         case 'GET':
             cur = conn.cursor()
-            sql = 'select book._id,name,author,press,cls_name,active from book,book_cls where cls=book_cls._id order by _id'
+            sql = 'select book._id,name,author,press,cls_name,active from book,book_cls where cls=book_cls._id order ' \
+                  'by _id '
             cur.execute(sql)
             content = cur.fetchall()
             return render_template('admin.html', content=content)
