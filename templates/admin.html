@@ -11,7 +11,7 @@
     <script src="https://cdn.staticfile.org/twitter-bootstrap/5.1.3/js/bootstrap.min.js"></script>
 </head>
 <body>
-<button class="btn btn-success" type="button" onclick="window.location.href={{ url_for('add_book') }}">添加图书</button>
+<button class="btn btn-success" type="button" onclick="window.location.href='{{ url_for("add_book") }}'">添加图书</button>
 <table class="table table-hover">
     <thead>
     <tr>
@@ -36,8 +36,8 @@
                 {% else %}
                     <a href="./control?cmd=up_store&book_id={{ i[0] }}">上架</a>
                 {% endif %}
-                <a href="./control?cmd=del_book&book_id={{ i[0] }}">删除</a>
-                <a href="./control?cmd=update_book&book_id={{ i[0] }}">修改</a>
+                <a href="{{ url_for('control') }}?cmd=del_book&book_id={{ i[0] }}">删除</a>
+                <a href="{{ url_for('update_book') }}?book_id={{ i[0] }}">修改</a>
             </td>
         </tr>
     {% endfor %}

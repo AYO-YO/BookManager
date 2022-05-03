@@ -2,13 +2,13 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <title>{{ title }}成功！</title>
+    <title>{{ title }}失败！</title>
 
 </head>
 <body>
 <script>
     window.onload = function () {
-        alert('{{ title }}成功！');
+        alert('{{ title }}失败！{{ message }}');
         window.history.back();
     }
 </script>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>添加图书</title>
+    <!-- 新 Bootstrap5 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
+    <!--  popper.min.js 用于弹窗、提示、下拉菜单 -->
+    <script src="https://cdn.staticfile.org/popper.js/2.9.3/umd/popper.min.js"></script>
+    <!-- 最新的 Bootstrap5 核心 JavaScript 文件 -->
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/5.1.3/js/bootstrap.min.js"></script>
+</head>
+<body>
+<form method="post" action="{{ url_for('add_book') }}">
+    <div class="mb-3 mt-3">
+        <label for="book_name" class="form-label">书名：</label>
+        <input type="text" class="form-control" id="book_name" placeholder="请输入书名" name="book_name">
+    </div>
+    <div class="mb-3">
+        <label for="book_auth" class="form-label">作者：</label>
+        <input type="text" class="form-control" id="book_auth" placeholder="请输入作者名" name="book_auth">
+    </div>
+    <div class="mb-3">
+        <label for="book_press" class="form-label">出版社：</label>
+        <input type="text" class="form-control" id="book_press" placeholder="请输入出版社" name="book_press">
+    </div>
+    <div class="mb-3">
+        <label for="book_cls" class="form-label">选择类别：</label>
+        <select name="book_cls" id="book_cls" class="form-control">
+            {% for i in cls %}
+                <option value="{{ i[0] }}">{{ i[0] }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-3 form-check form-switch">
+        <input class="form-check-input" type="checkbox" name="is_active" id="is_active" checked>
+        <label class="form-check-label" for="is_active">是否上架</label>
+    </div>
+    <button type="submit" class="btn btn-primary">添加</button>
+    <button type="button" class="btn btn-warning">管理类别</button>
+</form>
+</body>
+</html>
