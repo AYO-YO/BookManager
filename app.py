@@ -3,7 +3,7 @@ from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
 
-conn = pymysql.connect(host='114.116.105.214',
+conn = pymysql.connect(host='172.19.201.172',
                        user='book_manager',
                        password='fan123',
                        db='book_manager',

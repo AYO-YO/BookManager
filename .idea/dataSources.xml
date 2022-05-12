@@ -8,11 +8,11 @@
       <jdbc-url>jdbc:mysql://114.116.105.214:3306/book_manager</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="book_manager@172.30.79.15" uuid="02ddf465-c4f5-42d3-bcc7-2e92dca44eb4">
+    <data-source source="LOCAL" name="book_manager@172.19.201.172" uuid="02ddf465-c4f5-42d3-bcc7-2e92dca44eb4">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://172.30.79.15:3306/book_manager</jdbc-url>
+      <jdbc-url>jdbc:mysql://172.19.201.172:3306/book_manager</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>
