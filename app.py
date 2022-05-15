@@ -132,6 +132,12 @@ def control():
             flag = excute_sql(sql, (borrow_id,))
             if flag:
                 return render_template('alert.html', t='审批成功！', m='审批成功！')
+        case 're_borrow' | 'ret':
+            borrow_id = request.values.get('borrow_id')
+            sql = f'update borrow set status={0 if cmd == "re_borrow" else 3} where _id=%s'
+            flag = excute_sql(sql, (borrow_id,))
+            if flag:
+                return render_template('alert.html', t='处理成功！', m='处理成功！')
 
 
 @app.route('/add_book', methods=['GET', 'POST'])
