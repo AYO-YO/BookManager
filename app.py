@@ -1,9 +1,7 @@
-import pymysql
 from flask import Flask, render_template, request, redirect, url_for
+from SQLConfig import conn
 
 app = Flask(__name__)
-
-conn = pymysql.connect(host='172.24.216.191', user='book_manager', password='fan123', db='book_manager', charset='utf8')
 
 user = {}
 
@@ -215,6 +213,13 @@ def borrow_list():
     sql = 'select borrow._id,user.user_name,book.name,date from borrow,user,book where borrow.user_id=user._id and borrow.book_id=book._id and status=1'
     content = query_sql(sql)
     return render_template('borrow-list.html', content=content)
+
+
+@app.route('/logout')
+def logout():
+    user['id'] = ''
+    user['name'] = ''
+    return redirect(url_for('index'))
 
 
 if __name__ == '__main__':
