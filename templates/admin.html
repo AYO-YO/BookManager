@@ -12,6 +12,13 @@
 </head>
 <body>
 <button class="btn btn-success" type="button" onclick="window.location.href='{{ url_for("add_book") }}'">添加图书</button>
+{% if need %}
+    <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for('approval') }}'">借阅审批
+    </button>
+{% else %}
+    <button type="button" class="btn btn-secondary" disabled>借阅审批</button>
+{% endif %}
+<button type="button" class="btn btn-warning">已出借图书</button>
 <table class="table table-hover">
     <thead>
     <tr>

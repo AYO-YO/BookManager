@@ -3,7 +3,7 @@ from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
 
-conn = pymysql.connect(host='172.19.201.172', user='book_manager', password='fan123', db='book_manager', charset='utf8')
+conn = pymysql.connect(host='172.24.216.191', user='book_manager', password='fan123', db='book_manager', charset='utf8')
 
 user = {}
 
@@ -92,7 +92,16 @@ def admin():
                   'by _id '
             cur.execute(sql)
             content = cur.fetchall()
-            return render_template('admin.html', content=content)
+
+            need_approval = len(query_sql('select * from borrow where status=0')) > 0
+            return render_template('admin.html', content=content, need=need_approval)
+
+
+@app.route('/approval')
+def approval():
+    sql = 'select borrow._id,name,user_name,date from borrow,book,user where borrow.book_id=book._id and borrow.user_id=user._id and borrow.status=0'
+    content = query_sql(sql)
+    return render_template('admin-approval.html', content=content)
 
 
 @app.route('/control', methods=['GET', 'POST'])
@@ -115,6 +124,12 @@ def control():
             flag = excute_sql(sql, (book_id,))
             if flag:
                 return render_template('alert.html', t='删除成功', m='删除成功！')
+        case 'app-accept' | 'app-deny':
+            borrow_id = request.values.get('borrow_id')
+            sql = f'update borrow set status={1 if cmd == "app-accept" else 2} where _id=%s'
+            flag = excute_sql(sql, (borrow_id,))
+            if flag:
+                return render_template('alert.html', t='审批成功！', m='审批成功！')
 
 
 @app.route('/add_book', methods=['GET', 'POST'])
@@ -171,7 +186,7 @@ def sub():
     book_id = request.values.get('book_id')
     book_name = query_sql('select name from book where _id=%s', (book_id,))[0][0]
     # 是否已经借阅
-    sql = 'select * from borrow where user_id=%s and book_id=%s and is_return=0'
+    sql = 'select * from borrow where user_id=%s and book_id=%s and status=0'
     flag = len(query_sql(sql, (user_id, book_id))) > 0
     if flag:
         # 借阅失败，两种情况，一种是已经借了本种图书但没有归还
