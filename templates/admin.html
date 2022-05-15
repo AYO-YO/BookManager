@@ -18,7 +18,8 @@
 {% else %}
     <button type="button" class="btn btn-secondary" disabled>借阅审批</button>
 {% endif %}
-<button type="button" class="btn btn-warning">已出借图书</button>
+<button type="button" class="btn btn-warning" onclick="window.location.href='{{ url_for('borrow_list') }}'">已出借图书
+</button>
 <table class="table table-hover">
     <thead>
     <tr>

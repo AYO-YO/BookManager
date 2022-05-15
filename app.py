@@ -210,5 +210,12 @@ def sub():
         return render_template('alert.html', t='借阅失败', m='借阅失败，请检查是否账户是否异常！')
 
 
+@app.route('/borrow_list')
+def borrow_list():
+    sql = 'select borrow._id,user.user_name,book.name,date from borrow,user,book where borrow.user_id=user._id and borrow.book_id=book._id and status=1'
+    content = query_sql(sql)
+    return render_template('borrow-list.html', content=content)
+
+
 if __name__ == '__main__':
     app.run()

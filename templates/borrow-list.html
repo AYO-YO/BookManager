@@ -11,14 +11,14 @@
     <script src="https://cdn.staticfile.org/twitter-bootstrap/5.1.3/js/bootstrap.min.js"></script>
 </head>
 <body>
+<button type="button" class="btn btn-success" onclick="window.location.href = document.referrer">返回上一页</button>
 <table class="table table-hover">
     <thead>
     <tr>
         <th>借阅id</th>
-        <th>书名</th>
         <th>用户名</th>
-        <th>申请时间</th>
-        <th>操作</th>
+        <th>书名</th>
+        <th>借阅时间</th>
     </tr>
     </thead>
     <tbody>
@@ -27,10 +27,6 @@
             {% for j in i %}
                 <td>{{ j }}</td>
             {% endfor %}
-            <td>
-                <a href="{{ url_for('control') }}?cmd=app-accept&borrow_id={{ i[0] }}">同意</a>
-                <a href="{{ url_for('control') }}?cmd=app-deny&borrow_id={{ i[0] }}">拒绝</a>
-            </td>
         </tr>
     {% endfor %}
     </tbody>
