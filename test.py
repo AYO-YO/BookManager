@@ -24,6 +24,6 @@ def query_sql(sql, args=tuple()):
         return content
 
 
-sql = 'select _id,from borrow'
-c = query_sql(sql)[0][3]
+sql = 'select _id from user where user_name=%s and user_pwd=%s and role=%s'
+c = query_sql(sql, ('赵春旭', '123', 1))[0][0]
 print(c)

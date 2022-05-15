@@ -40,10 +40,12 @@ def login():
     user_pwd = request.values.get('user_pwd')
     user_role = 0 if request.values.get('role') == 'admin' else 1
     print(user_role)
-    sql = 'select * from user where user_name=%s and user_pwd=%s and role=%s'
-    flag = len(query_sql(sql, (user_name, user_pwd, user_role))) > 0
+    sql = 'select _id from user where user_name=%s and user_pwd=%s and role=%s'
+    content = query_sql(sql, (user_name, user_pwd, user_role))
+    flag = len(content) > 0
     print(flag)
     if flag:
+        user['id'] = content[0][0]
         user['name'] = user_name
         return redirect(url_for('main' if user_role else 'admin'))
     else:
@@ -75,12 +77,12 @@ def register():
 def main():
     match request.method:
         case 'GET':
-            cur = conn.cursor()
             sql = 'select book._id,name,author,press,cls_name from book,book_cls where cls=book_cls._id and active=1 ' \
                   'order by _id '
-            cur.execute(sql)
-            content = cur.fetchall()
-            return render_template('main.html', content=content)
+            content = query_sql(sql)
+            sql = 'select borrow._id,book.name,borrow.date,borrow.status from borrow,book where borrow.book_id=book._id and user_id=%s'
+            borrow = query_sql(sql, (user['id'],))
+            return render_template('main.html', content=content, borrow=borrow)
 
 
 @app.route('/admin', methods=['GET', 'POST'])
