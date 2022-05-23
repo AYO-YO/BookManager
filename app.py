@@ -202,7 +202,7 @@ def sub():
     flag = excute_sql(sql, (user_id, book_id)) > 0
     if flag:
         # 借阅成功
-        return render_template('alert.html', t='借阅成功', m=f'借阅{book_name}成功！')
+        return render_template('alert.html', t='申请借阅成功', m=f'申请借阅{book_name}成功！')
     else:
         # 另外一种（暂未实现）是用户所借图书已达上限
         return render_template('alert.html', t='借阅失败', m='借阅失败，请检查是否账户是否异常！')
